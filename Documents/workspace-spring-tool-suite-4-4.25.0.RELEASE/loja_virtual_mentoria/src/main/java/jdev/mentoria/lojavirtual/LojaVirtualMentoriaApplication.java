@@ -3,6 +3,7 @@ package jdev.mentoria.lojavirtual;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/*A anotação abaixo é o que faz o Springboot funcionar*/
 @SpringBootApplication
 public class LojaVirtualMentoriaApplication {
 
