@@ -9,6 +9,7 @@ public class LojaVirtualMentoriaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LojaVirtualMentoriaApplication.class, args);
+		System.out.println("Conexão loja virtual mentoria.");
 	}
 
 }
