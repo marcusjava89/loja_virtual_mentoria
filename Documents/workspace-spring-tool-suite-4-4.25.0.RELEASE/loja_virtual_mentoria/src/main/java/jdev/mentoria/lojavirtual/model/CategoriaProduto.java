@@ -3,6 +3,7 @@ package jdev.mentoria.lojavirtual.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,8 @@ public class CategoriaProduto implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_categoria_produto")
 	private Long id;
+	
+	@Column(name = "nome_desc", nullable = false)
 	private String nomeDesc;
 	
 	private Long getId() {
@@ -50,7 +53,5 @@ public class CategoriaProduto implements Serializable{
 		CategoriaProduto other = (CategoriaProduto) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 	
 }
