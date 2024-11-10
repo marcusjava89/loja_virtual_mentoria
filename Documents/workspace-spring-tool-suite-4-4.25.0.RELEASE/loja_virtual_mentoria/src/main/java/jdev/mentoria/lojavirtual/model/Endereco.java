@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jdev.mentoria.lojavirtual.enums.TipoEndereco;
 
 @Entity
 @Table(name = "endereco")
@@ -34,12 +37,23 @@ public class Endereco  implements Serializable{
 	/*Define a relação de muitos para um no banco de dados, muitos endereços podem ser de uma pessoa. Também deixar 
 	 *claro a entidade alvo que é Pessoa.*/
 	@ManyToOne(targetEntity = Pessoa.class)
-	/*Criou-se uma coluna para essa chav estrangeira.*/
+	/*Anotação @JoinColumn. Para chave estrangeira*/
 	@JoinColumn(name = "pessoa_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
+	/*pessoa, atributo relacionado a outra tabela, então é uma chave estrangeira e pela anotação destaca-se isso.*/
+
+	/*Vindo do diagrama de classes.*/
+	@Enumerated(EnumType.STRING)
+	private TipoEndereco tipoEndereco; 
 	
-	/*pessoa é um atributo relacionado a outra tabela, então é uma chave estrangeira e pela anotação destaca-se isso.*/
+	private TipoEndereco getTipoEndereco() {
+		return tipoEndereco;
+	}
+
+	private void setTipoEndereco(TipoEndereco tipoEndereco) {
+		this.tipoEndereco = tipoEndereco;
+	}
 
 	private Long getId() {
 		return id;
@@ -137,9 +151,4 @@ public class Endereco  implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-	
 }
