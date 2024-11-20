@@ -47,13 +47,14 @@ public class Usuario implements UserDetails{
 	foreignKey = @ForeignKey(name = "usuario_fk", value = ConstraintMode.CONSTRAINT)),
 	inverseJoinColumns = @JoinColumn(name = "acesso_id", unique = false, referencedColumnName = "id", table = "acesso",
 	foreignKey =  @ForeignKey( name = "acesso_fk", value = ConstraintMode.CONSTRAINT)))
-	
 	private List<Acesso> acessos;
+	
+	/*Em inverseJoinColumns dizemos que unique tinha que ser false e mesmo assim foi criado um constraint no banco de
+	 *dados em usuario_acessos, que vai ser eliminado na manuntenção do banco./
 	
 	/*Autoridades = São os acessos, ou seja ROLE_ADMIN, ROLE_SECRETARIO, ROLE_FINANCEIRO.*/
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return this.acessos;
 	}
 

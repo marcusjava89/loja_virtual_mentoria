@@ -36,6 +36,7 @@ public class Endereco  implements Serializable{
 	
 	/*Define a relação de muitos para um no banco de dados, muitos endereços podem ser de uma pessoa. Também deixar 
 	 *claro a entidade alvo que é Pessoa.*/
+	/*Essa noatação deve ser feita porque temos relacionamento entre Endereço e Pessoa*/
 	@ManyToOne(targetEntity = Pessoa.class)
 	/*Anotação @JoinColumn. Para chave estrangeira*/
 	@JoinColumn(name = "pessoa_id", nullable = false, 
