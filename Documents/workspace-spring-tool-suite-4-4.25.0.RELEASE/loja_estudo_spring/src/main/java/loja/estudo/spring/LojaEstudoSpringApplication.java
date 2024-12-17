@@ -8,6 +8,6 @@ public class LojaEstudoSpringApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LojaEstudoSpringApplication.class, args);
+		System.out.println("Conexão loja estudo Spring.");
 	}
-
 }
