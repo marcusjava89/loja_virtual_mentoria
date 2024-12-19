@@ -17,7 +17,7 @@ import jakarta.persistence.SequenceGenerator;
 
 @Entity
 /*Usando essa estratégia não iremos usar a anotação @PrimaryKeyColumn nas classes filhas para não dar erro.*/
-/*Faz sentido uma anotação que define o tipo de herança que teremos, visto que é uma super CLasse.*/
+/*A anotação é feita, pois Pessoa é uma super CLasse.*/
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 /*As classes filhas herdam o @SequenceGenerator, não precisando colocar nelas.*/
 @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa", allocationSize = 1, initialValue = 1)
@@ -34,10 +34,10 @@ public abstract class Pessoa  implements Serializable{
 	private String email;
 	private String telefone;
 	
-	/*Uma pessoa pode ter uma lista de endereços, seja pessoa física ou jurídica.*/
+	/*Pessoa pode ter uma lista de endereços, seja pessoa física ou jurídica.*/
 	/*Atributos que apontam para outra tabela recebem uma anotação.*/
 	/*Atributo endereco não está no diagrama de classes e foi posto depois. Não obrigatório colocar esse atributo.*/
-	@OneToMany(mappedBy = "pessoa", orphanRemoval = true,cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	/*apontando para a chave estrangeira pessoa em Endereco*/
 	private List<Endereco> enderecos = new ArrayList<>();
 	
@@ -95,9 +95,5 @@ public abstract class Pessoa  implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-	
-	
-	
+	}	
 }

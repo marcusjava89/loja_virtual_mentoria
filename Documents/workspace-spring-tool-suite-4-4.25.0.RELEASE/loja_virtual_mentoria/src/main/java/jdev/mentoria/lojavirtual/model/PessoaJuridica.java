@@ -53,8 +53,5 @@ public class PessoaJuridica extends Pessoa{
 	private void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
-	
-	
-	
 
 }

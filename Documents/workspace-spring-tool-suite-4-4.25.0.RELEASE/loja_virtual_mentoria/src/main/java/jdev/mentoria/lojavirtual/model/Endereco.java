@@ -36,25 +36,17 @@ public class Endereco  implements Serializable{
 	
 	/*Define a relação de muitos para um no banco de dados, muitos endereços podem ser de uma pessoa. Também deixar 
 	 *claro a entidade alvo que é Pessoa.*/
-	/*Essa noatação deve ser feita porque temos relacionamento entre Endereço e Pessoa*/
+	/*Essa anotação deve ser feita porque temos relacionamento entre Endereço e Pessoa.*/
+	/*na anotação ManyToOne coloca-se a entidade alvo.*/
 	@ManyToOne(targetEntity = Pessoa.class)
-	/*Anotação @JoinColumn. Para chave estrangeira*/
+	/*Anotação @JoinColumn. Para chave estrangeira.*/
 	@JoinColumn(name = "pessoa_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
 	/*pessoa, atributo relacionado a outra tabela, então é uma chave estrangeira e pela anotação destaca-se isso.*/
 
-	/*Vindo do diagrama de classes.*/
 	@Enumerated(EnumType.STRING)
 	private TipoEndereco tipoEndereco; 
-	
-	private TipoEndereco getTipoEndereco() {
-		return tipoEndereco;
-	}
-
-	private void setTipoEndereco(TipoEndereco tipoEndereco) {
-		this.tipoEndereco = tipoEndereco;
-	}
 
 	private Long getId() {
 		return id;
@@ -126,6 +118,14 @@ public class Endereco  implements Serializable{
 
 	private void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+	}
+	
+	private TipoEndereco getTipoEndereco() {
+		return tipoEndereco;
+	}
+
+	private void setTipoEndereco(TipoEndereco tipoEndereco) {
+		this.tipoEndereco = tipoEndereco;
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import jakarta.persistence.UniqueConstraint;
 @SequenceGenerator(name = "seq_usuario", sequenceName = "seq_usuario", allocationSize = 1, initialValue = 1)
 public class Usuario implements UserDetails{
 	
+	/*UserDetails implementa Serializable, por isso serialVersionUID.*/
 	private static final long serialVersionUID = 1L;
 
 	@Id	
@@ -38,9 +39,10 @@ public class Usuario implements UserDetails{
 	@Temporal(TemporalType.DATE)
 	private Date dataAtualSenha; 
 	
-	/*Sem essa anotação temos erro de execução. O mesmo acontece em Pessoa com lista de endereços. Parece que listas
-	 * de objetos de outras classes do projeto precisam de anotação para não dar erro de execução.*/
+	/*Sem essa anotação temos erro de execução. O mesmo acontece em Pessoa com lista de endereços. Listas de objetos 
+	 *de outras classes são chaves estrangeiras.*/
 	@OneToMany(fetch = FetchType.LAZY)
+	/*Aqui criamos no banco de dados usuario_acesso*/
 	@JoinTable(name = "usuario_acesso", uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id","acesso_id"},
 	name = "unique_acesso_user"), 
 	joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id", table = "usuario", unique = false,
@@ -48,6 +50,11 @@ public class Usuario implements UserDetails{
 	inverseJoinColumns = @JoinColumn(name = "acesso_id", unique = false, referencedColumnName = "id", table = "acesso",
 	foreignKey =  @ForeignKey( name = "acesso_fk", value = ConstraintMode.CONSTRAINT)))
 	private List<Acesso> acessos;
+	
+	/*É necessário ter o unique false para termos mais de um tipo de acesso, referência.*/
+	
+	/*Tudo dentro de @JoinTable está relacionada à tabela usuario_acesso, que gera uma CONSTRAINT que não deveria, por
+	 *isso será removida na manuntenção do banco de dados.*/
 	
 	/*Em inverseJoinColumns dizemos que unique tinha que ser false e mesmo assim foi criado um constraint no banco de
 	 *dados em usuario_acessos, que vai ser eliminado na manuntenção do banco./
@@ -60,17 +67,14 @@ public class Usuario implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return this.senha;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return this.login;
 	}
 
 	/*Existem mais três métodos que deveriam vir de UserDetails e não vieram, mas nessa versão eles já estão retor-
 	 *nando true. O professor teve que mudar manualmente para true. Caso dê problema buscar métodos na interface.*/
-	
 }

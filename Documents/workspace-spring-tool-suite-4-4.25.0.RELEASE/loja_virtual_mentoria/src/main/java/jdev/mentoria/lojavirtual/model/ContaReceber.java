@@ -39,11 +39,13 @@ public class ContaReceber  implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date dtVencimento;
 	
-	private BigDecimal valorTotal;
+	@Temporal(TemporalType.DATE)
+	private Date dtPagamento;
 	
+	private BigDecimal valorTotal;
 	private BigDecimal valorDesconto;
 
-	/*ContaReceber tem relacionamento com Pessoa. Muitas contas a receber para uma pessoa.*/		
+	/*Muitas contas a receber para uma pessoa.*/		
 	@ManyToOne(targetEntity = Pessoa.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
@@ -79,6 +81,14 @@ public class ContaReceber  implements Serializable{
 
 	private void setDtVencimento(Date dtVencimento) {
 		this.dtVencimento = dtVencimento;
+	}
+	
+	public Date getDtPagamento() {
+		return dtPagamento;
+	}
+	
+	public void setDtPagamento(Date dtPagamento) {
+		this.dtPagamento = dtPagamento;
 	}
 
 	private BigDecimal getValorTotal() {
@@ -129,7 +139,4 @@ public class ContaReceber  implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
 }

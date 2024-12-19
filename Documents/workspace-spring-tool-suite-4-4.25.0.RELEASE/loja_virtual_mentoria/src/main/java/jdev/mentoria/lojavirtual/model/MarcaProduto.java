@@ -1,7 +1,6 @@
 package jdev.mentoria.lojavirtual.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +23,7 @@ public class MarcaProduto  implements Serializable{
 	
 	@Column(nullable = false)
 	private String nomeDesc;
+	
 	private Long getId() {
 		return id;
 	}

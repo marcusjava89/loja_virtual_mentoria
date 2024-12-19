@@ -14,6 +14,7 @@ import jakarta.persistence.TemporalType;
 public class PessoaFisica  extends Pessoa{	
 	private static final long serialVersionUID = 1L;
 	
+	/*Para garantir que não seja vazio*/
 	@Column(nullable = false)
 	private String cpf;
 	
@@ -35,7 +36,4 @@ public class PessoaFisica  extends Pessoa{
 	private void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-
-
-
 }

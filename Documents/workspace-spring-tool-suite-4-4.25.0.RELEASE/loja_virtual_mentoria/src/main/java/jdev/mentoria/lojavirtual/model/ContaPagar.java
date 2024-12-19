@@ -43,7 +43,6 @@ public class ContaPagar  implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date dtVencimento;
 	
-	
 	private BigDecimal valorDesconto;
 	
 	@ManyToOne(targetEntity = Pessoa.class)

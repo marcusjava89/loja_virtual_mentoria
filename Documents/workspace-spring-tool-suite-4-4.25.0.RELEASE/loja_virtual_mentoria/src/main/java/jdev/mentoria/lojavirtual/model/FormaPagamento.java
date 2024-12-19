@@ -20,6 +20,7 @@ public class FormaPagamento  implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_forma_pagamento")
 	private Long id;
 	private String descricao;
+	
 	private Long getId() {
 		return id;
 	}

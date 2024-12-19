@@ -1,6 +1,5 @@
 package jdev.mentoria.lojavirtual.model;
 
-import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -24,7 +23,7 @@ public class Acesso implements GrantedAuthority{
 	private Long id;
 	private String descricao; // ROLE_ADMIN ou ROLE_SECRETARIO
 
-	/*Método sempre eimplementado quando se implementa GrantedAuthority.*/
+	/*Método sempre é implementado quando se implementa GrantedAuthority. Mudar retorno.*/
 	@Override
 	public String getAuthority() {
 		return this.descricao; 
