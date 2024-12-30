@@ -13,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jdev.mentoria.lojavirtual.NotaFiscalCompra;
 
 @Entity
 @Table(name = "nota_item_produto")
@@ -39,6 +38,12 @@ public class NotaItemProduto implements Serializable{
 	@JoinColumn(name = "nota_fiscal_compra_id", nullable = false, 
 	foreignKey = @ForeignKey(name = "nota_fiscal_compra_fk", value = ConstraintMode.CONSTRAINT))
 	private NotaFiscalCompra notaFiscalCompra;
+	
+	/*Na outra ponta em NotaFiscalCompra poderiamos ter 
+	 *@OneToMany
+	 *private List<NotaItemProduto> etc.
+	 *Não teremos, pois pode gerar lentidão de carregamento, quando precisarmos faremos consulta ao banco de dados.
+	 *Mas fizemos em Pessoa e Endereco.*/
 
 	private Long getId() {
 		return id;

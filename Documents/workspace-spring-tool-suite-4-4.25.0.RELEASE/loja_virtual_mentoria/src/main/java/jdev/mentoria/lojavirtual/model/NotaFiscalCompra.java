@@ -1,4 +1,4 @@
-package jdev.mentoria.lojavirtual;
+package jdev.mentoria.lojavirtual.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,8 +18,6 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jdev.mentoria.lojavirtual.model.ContaPagar;
-import jdev.mentoria.lojavirtual.model.Pessoa;
 
 @Entity
 @Table(name = "nota_fiscal_compra")
@@ -48,7 +46,7 @@ public class NotaFiscalCompra implements Serializable{
 	foreignKey = @ForeignKey(name = "pessoa_fk", value = ConstraintMode.CONSTRAINT))
 	private Pessoa pessoa;
 	
-	/*Aqui não colocamos entidade alvo, talvez porque no diagrama era de um para um.*/
+	/*Errado no diagrama de classes. Muitas notas fiscais para uma conta pra pagar.*/
 	@ManyToOne()
 	@JoinColumn(name = "conta_pagar_id", nullable = false, 
 	foreignKey = @ForeignKey(name = "conta_pagar_fk", value = ConstraintMode.CONSTRAINT))

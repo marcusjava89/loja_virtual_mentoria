@@ -24,7 +24,7 @@ public class Produto  implements Serializable{
 	private String tipoUnidade;
 	private String nome;
 	/*Não está no diagrama. Para ter um status ativo ou não. Começa pelo true. Boolean pode ser true, false ou null.
-	 *Se nçao definirmos ele começa como null.*/
+	 *Se não definirmos ele começa como null.*/
 	private Boolean ativo = Boolean.TRUE;
 	
 	/*No diagrama descricao está como text e não String. Com a definição do tipo text o length se faz desnecessário.*/
@@ -39,11 +39,11 @@ public class Produto  implements Serializable{
 	private Double largura;
 	private Double altura;
 	private Double profundidade;
-	private BigDecimal valorVenda = BigDecimal.ZERO;
+	private BigDecimal valorVenda = BigDecimal.ZERO; /*Começa no zero.*/
 	private Integer QtdEstoque = 0;
 	private Integer QtdeAlertaEstoque = 0;
 	private String linkYoutube;	
-	private Boolean alertaQtdeEstoque = Boolean.FALSE;
+	private Boolean alertaQtdeEstoque = Boolean.FALSE; /*Começa desligado.*/
 	private Integer qtdeClique = 0;
 	
 	public void setAtivo(Boolean ativo) {

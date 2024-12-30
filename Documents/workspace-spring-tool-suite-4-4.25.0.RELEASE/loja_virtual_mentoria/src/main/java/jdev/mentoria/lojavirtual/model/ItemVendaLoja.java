@@ -2,7 +2,6 @@ package jdev.mentoria.lojavirtual.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -15,27 +14,29 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "imagem_produto")
-@SequenceGenerator(name = "seq_imagem_produto", sequenceName = "seq_imagem_produto", allocationSize = 1, initialValue = 1)
-public class ImagemProduto implements Serializable{
+@Table(name = "item_venda_loja")
+@SequenceGenerator(name = "seq_item_venda_loja", sequenceName = "seq_item_venda_loja", allocationSize = 1, 
+initialValue = 1)
+public class ItemVendaLoja implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
-	@Id	
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_imagem_produto")
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_item_venda_loja")
 	private Long id;
 	
-	@Column(columnDefinition = "text")
-	private String imagemOriginal;
+	/*Começar pelo atributo mais fácil.*/
+	private Double quantidade;
 	
-	@Column(columnDefinition = "text")
-	private String imagemMiniatura;
-	
-	/*Para saber qual anotação usar vai de cima para baixo. Muitas imagens para um produto, many to one.*/
-	@ManyToOne(targetEntity = Produto.class)
+	@ManyToOne
 	@JoinColumn(name = "produto_id", nullable = false, 
-	foreignKey = @ForeignKey(name = "produto_fk", value = ConstraintMode.CONSTRAINT))
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "produto_fk"))
 	private Produto produto;
+	
+	@ManyToOne
+	@JoinColumn(name = "venda_compra_loja_virtu_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virtu_fk"))
+	private VendaCompraLojaVirtual vendaCompraLojaVirtual;
 
 	private Long getId() {
 		return id;
@@ -45,20 +46,12 @@ public class ImagemProduto implements Serializable{
 		this.id = id;
 	}
 
-	private String getImagemOriginal() {
-		return imagemOriginal;
+	private Double getQuantidade() {
+		return quantidade;
 	}
 
-	private void setImagemOriginal(String imagemOriginal) {
-		this.imagemOriginal = imagemOriginal;
-	}
-
-	private String getImagemMiniatura() {
-		return imagemMiniatura;
-	}
-
-	private void setImagemMiniatura(String imagemMiniatura) {
-		this.imagemMiniatura = imagemMiniatura;
+	private void setQuantidade(Double quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	private Produto getProduto() {
@@ -67,6 +60,14 @@ public class ImagemProduto implements Serializable{
 
 	private void setProduto(Produto produto) {
 		this.produto = produto;
+	}
+
+	private VendaCompraLojaVirtual getVendaCompraLojaVirtual() {
+		return vendaCompraLojaVirtual;
+	}
+
+	private void setVendaCompraLojaVirtual(VendaCompraLojaVirtual vendaCompraLojaVirtual) {
+		this.vendaCompraLojaVirtual = vendaCompraLojaVirtual;
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class ImagemProduto implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ImagemProduto other = (ImagemProduto) obj;
+		ItemVendaLoja other = (ItemVendaLoja) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -93,8 +94,6 @@ public class ImagemProduto implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
 	
 	
 	

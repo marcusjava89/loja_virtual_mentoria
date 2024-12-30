@@ -2,7 +2,6 @@ package jdev.mentoria.lojavirtual.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -15,28 +14,39 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "imagem_produto")
-@SequenceGenerator(name = "seq_imagem_produto", sequenceName = "seq_imagem_produto", allocationSize = 1, initialValue = 1)
-public class ImagemProduto implements Serializable{
+@Table(name = "avalicao_produto")
+@SequenceGenerator(name = "seq_avalicao_produto", sequenceName = "seq_avalicao_produto", allocationSize = 1, 
+initialValue = 1)
+public class AvaliacaoProduto implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id	
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_imagem_produto")
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_avalicao_produto")
 	private Long id;
 	
-	@Column(columnDefinition = "text")
-	private String imagemOriginal;
+	private String descricao;
 	
-	@Column(columnDefinition = "text")
-	private String imagemMiniatura;
+	private Integer nota;
 	
-	/*Para saber qual anotação usar vai de cima para baixo. Muitas imagens para um produto, many to one.*/
-	@ManyToOne(targetEntity = Produto.class)
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "pessoa_id", nullable = false, 
+	foreignKey = @ForeignKey(name = "pessoa_fk", value = ConstraintMode.CONSTRAINT))
+	private Pessoa pessoa;
+	
+	@ManyToOne
 	@JoinColumn(name = "produto_id", nullable = false, 
-	foreignKey = @ForeignKey(name = "produto_fk", value = ConstraintMode.CONSTRAINT))
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "produto_fk"))
 	private Produto produto;
 
+	public String getDescricao() {
+		return descricao;
+	}
+	
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
 	private Long getId() {
 		return id;
 	}
@@ -45,20 +55,20 @@ public class ImagemProduto implements Serializable{
 		this.id = id;
 	}
 
-	private String getImagemOriginal() {
-		return imagemOriginal;
+	private Integer getNota() {
+		return nota;
 	}
 
-	private void setImagemOriginal(String imagemOriginal) {
-		this.imagemOriginal = imagemOriginal;
+	private void setNota(Integer nota) {
+		this.nota = nota;
 	}
 
-	private String getImagemMiniatura() {
-		return imagemMiniatura;
+	private Pessoa getPessoa() {
+		return pessoa;
 	}
 
-	private void setImagemMiniatura(String imagemMiniatura) {
-		this.imagemMiniatura = imagemMiniatura;
+	private void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	private Produto getProduto() {
@@ -85,7 +95,7 @@ public class ImagemProduto implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ImagemProduto other = (ImagemProduto) obj;
+		AvaliacaoProduto other = (AvaliacaoProduto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -99,4 +109,6 @@ public class ImagemProduto implements Serializable{
 	
 	
 	
+	
+
 }
