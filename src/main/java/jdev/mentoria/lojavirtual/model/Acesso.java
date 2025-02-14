@@ -1,6 +1,5 @@
 package jdev.mentoria.lojavirtual.model;
 
-
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Entity;
