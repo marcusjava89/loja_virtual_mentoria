@@ -25,7 +25,7 @@ class LojaVirtualMentoriaApplicationTests {
 	public void testCadastraAcesso() {
 		Acesso acesso = new Acesso();
 		
-		acesso.setDescricao("ROLE_ADMIN3");
+		acesso.setDescricao("ROLE_ADMIN4");
 		
 		acessoController.salvarAcesso(acesso);
 	}
