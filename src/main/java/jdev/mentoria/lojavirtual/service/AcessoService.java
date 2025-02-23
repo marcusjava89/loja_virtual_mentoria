@@ -12,12 +12,7 @@ public class AcessoService {
 	private AcessoRepository acessoRepository;
 	
 	public Acesso save(Acesso acesso) {
-		
 		/*Qualquer tipo de validação antes de salvar.*/
 		return acessoRepository.save(acesso);
 	}
 }
-
-
-
-
