@@ -18,3 +18,6 @@ public class LojaVirtualMentoriaApplication {
 		System.out.println("Conexão loja virtual mentoria.");
 	}
 }
+/*Tivemos que baixar a versão o jdk 11 e depois mudar a versão para o Java 11 e a versão do spring para 2.5.8 para
+ *a classe depreciada WebSecurityConfigurerAdapter pudesse rodar.*/
+ 
