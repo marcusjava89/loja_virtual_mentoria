@@ -1,23 +1,23 @@
 package jdev.mentoria.lojavirtual.model;
 
-/*Como pessoa é uma super classe com duas filhas no banco de dados as chaves estranageiras pessoa não são criadas.
+/*Pessoa é uma super classe com duas filhas, no banco de dados as chaves estranageiras pessoa não são criadas.
  *Devemos fazer manunteção no banco criando funções e triggers.*/
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator; 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator; 
 
 @Entity
 /*Usando essa estratégia não iremos usar a anotação @PrimaryKeyColumn nas classes filhas para não dar erro.*/

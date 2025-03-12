@@ -1,13 +1,13 @@
 package jdev.mentoria.lojavirtual.model;
 
-import org.springframework.security.core.GrantedAuthority;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "acesso")
@@ -35,15 +35,14 @@ public class Acesso implements GrantedAuthority{
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
 	public String getDescricao() {
 		return descricao;
 	}
-
+	
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
 
 	@Override
 	public int hashCode() {

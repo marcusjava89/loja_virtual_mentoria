@@ -21,10 +21,9 @@ public class AcessoController {
 	
 	@ResponseBody /*Poder dar um retorno da API.*/
 	@PostMapping(value = "/salvarAcesso")/*Mapeamento da URL para receber JSON.*/
-	/*@RequestBody recebe o JSON e converte para objeto.*/
 	public ResponseEntity<Acesso> salvarAcesso(@RequestBody Acesso acesso) {
-		Acesso acessoSalvo = new Acesso();
-		acessoService.save(acessoSalvo);
+
+		Acesso acessoSalvo = acessoService.save(acesso);
 		
 		return new ResponseEntity<Acesso>(acessoSalvo, HttpStatus.OK);
 	}

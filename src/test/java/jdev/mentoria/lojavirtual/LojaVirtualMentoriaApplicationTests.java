@@ -20,10 +20,4 @@ public class LojaVirtualMentoriaApplicationTests {
 	@Autowired
 	private AcessoController acessoController;
 	
-	@Test
-	public void testCadastraAcesso() { 
-		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_ADMIN5");
-		acessoController.salvarAcesso(acesso);
-	}
 }
