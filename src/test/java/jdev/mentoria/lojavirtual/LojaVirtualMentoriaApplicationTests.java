@@ -1,5 +1,7 @@
 package jdev.mentoria.lojavirtual;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +29,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		acesso.setDescricao("Role_Admin");
 		
 		assertEquals(true, acesso.getId() == null);
-		/*Gravou no banco de Dados*/
+		/*Gravou no banco de Dados. O getBody() é usado para extrair o conteúdo (corpo) da resposta (ResponseEntity)*/
 		acesso = acessoController.salvarAcesso(acesso).getBody();
 		assertEquals(true, acesso.getId() > 0);
 		/*Validar dados da forma correta.*/
@@ -44,8 +46,25 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		
 		/*O flush força o envio dessas operações pendentes para o banco de dados, garantindo que o estado do banco de
 		 * dados e o estado da sessão estejam sincronizados.*/
-		acessoRepository.flush(); /*Roda esse Sql de delet no banco de dados.*/
+		acessoRepository.flush(); /*Roda esse SQL de delete no banco de dados.*/
 		
+		/*findById tenta encontrar objeto que foi apagado do banco, para não daa excessão temos o orElse, se tiver o 
+		 *obejto acesso2, retorna ele,  se não retorna null*/
+		Acesso acesso3 = acessoRepository.findById(acesso2.getId()).orElse(null);
+		
+		assertEquals(true, acesso3 == null);
+		
+		/*Teste de query.*/
+		
+		acesso = new Acesso();
+		acesso.setDescricao("ROLE_ALUNO");
+		acesso = acessoController.salvarAcesso(acesso).getBody();
+		
+		List<Acesso> acessos = acessoRepository.buscarAcessoDesc("ALUNO".trim().toUpperCase());
+		
+		assertEquals(1, acessos.size());
+		
+		acessoRepository.deleteById(acesso.getId());
 		
 	}
 	
