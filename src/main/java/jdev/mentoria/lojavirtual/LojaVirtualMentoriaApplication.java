@@ -20,4 +20,8 @@ public class LojaVirtualMentoriaApplication {
 }
 /*Tivemos que baixar a versão o jdk 11 e depois mudar a versão para o Java 11 e a versão do spring para 2.5.8 para
  *a classe depreciada WebSecurityConfigurerAdapter pudesse rodar.*/
+
+/*Baixamos o framework JUnit 3 para estender na classe de Testes*/
+
+/*Colocamos a dependência jackson para json no pom.xml que nos ajudará para o Mockito.*/
  

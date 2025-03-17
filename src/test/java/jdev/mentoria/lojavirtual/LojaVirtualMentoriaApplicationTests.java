@@ -5,6 +5,16 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jdev.mentoria.lojavirtual.controller.AcessoController;
 import jdev.mentoria.lojavirtual.model.Acesso;
@@ -21,6 +31,50 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 	
 	@Autowired
 	private AcessoRepository acessoRepository;
+	
+	/*Objeto do Spring que pega as informações da aplicação que está rodando*/
+	@Autowired
+	private WebApplicationContext wac;
+	
+	@Test
+	public void restApiCadastroAcesso() throws JsonProcessingException, Exception {
+		/*DefaultMockMvcBuilder é usada para configurar e construir uma instância de MockMvc.*/
+		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+		/*MockMvc é uma ferramenta poderosa para testar controladores (controllers) em aplicações Spring MVC de forma
+		 *isolada, sem a necessidade de implantar a aplicação em um servidor real. */
+		MockMvc mockMvc = builder.build();
+		
+		Acesso acesso = new Acesso();
+		
+		acesso.setDescricao("ROLE_COMPRADOR3");
+		
+		/*Faz a serialização e a desserialização de uma string json para objetos, coleções, listas java e vice-
+		 * versa.*/
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		/*é usada para realizar ações e verificações (assertions) após simular uma requisição HTTP com o MockMvc*/
+		 /*objectMapper.writeValueAsString(acesso) serializa acesso em uma string json.*/
+		ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.post("/salvarAcesso")
+									.content(objectMapper.writeValueAsString(acesso))
+									.accept(MediaType.APPLICATION_JSON)
+									.contentType(MediaType.APPLICATION_JSON)); 
+		/*Ele é retornado pelo método perform() do MockMvc*/
+		
+		/*andReturn Retorna o MvcResult, que contém detalhes completos sobre o resultado da requisição simulada.*/
+		System.out.println("Retorno da API" + retornoApi.andReturn().getResponse().getContentAsString());
+		
+		/*Desserializa a string json em objeto java, nesse caso objeto Acesso.*/
+		Acesso objetoRetorno = objectMapper.readValue(retornoApi.andReturn().getResponse().getContentAsString(),
+								Acesso.class);
+		
+		assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
+		
+		
+		
+		
+		
+		
+	}
 	
 	@Test
 	public void testarCadastro() {
@@ -49,14 +103,14 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		acessoRepository.flush(); /*Roda esse SQL de delete no banco de dados.*/
 		
 		/*findById tenta encontrar objeto que foi apagado do banco, para não daa excessão temos o orElse, se tiver o 
-		 *obejto acesso2, retorna ele,  se não retorna null*/
+		 *objeto acesso2, retorna ele,  se não retorna null*/
 		Acesso acesso3 = acessoRepository.findById(acesso2.getId()).orElse(null);
 		
 		assertEquals(true, acesso3 == null);
 		
 		/*Teste de query.*/
 		
-		acesso = new Acesso();
+		acesso = new Acesso(); 
 		acesso.setDescricao("ROLE_ALUNO");
 		acesso = acessoController.salvarAcesso(acesso).getBody();
 		

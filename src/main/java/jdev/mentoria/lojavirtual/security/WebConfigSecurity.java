@@ -22,6 +22,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
 		
 	}
 
+	/*Método libera os end-point.*/
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers(HttpMethod.GET, "/salvarAcesso", "/deleteAcesso")

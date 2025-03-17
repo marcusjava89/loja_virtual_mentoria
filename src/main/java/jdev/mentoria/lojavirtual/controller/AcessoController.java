@@ -33,6 +33,7 @@ public class AcessoController {
 		return new ResponseEntity<Acesso>(acessoSalvo, HttpStatus.OK);
 	}
 	
+	/*Receber dados enviados por um formulário ou via JSON. POr isso não é @DeleteMApping.*/
 	@ResponseBody 
 	@PostMapping(value = "/deleteAcesso")/*Mapeamento da URL para receber JSON.*/
 	public ResponseEntity<?> deleteAcesso(@RequestBody Acesso acesso) {
