@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,4 +46,26 @@ public class AcessoController {
 		return new ResponseEntity("Acesso removido.",HttpStatus.OK);
 	}
 	
+	@ResponseBody 
+	@DeleteMapping(value = "/deleteAcessoPorId/{id}") 
+	public ResponseEntity<?> deleteAcessoPorId(@PathVariable("id") Long id) {
+		/*Método que deleta pelo id*/
+		acessoRepository.deleteById(id);
+		
+		return new ResponseEntity("Acesso removido por id.", HttpStatus.OK);
+	}
+	
+	@ResponseBody 
+	@GetMapping(value = "/obterAcesso/{id}") 
+	public ResponseEntity<?> obterAcesso(@PathVariable("id") Long id) {
+		/*Método que deleta pelo id*/
+		Acesso acesso = acessoRepository.findById(id).get();
+		
+		return new ResponseEntity<Acesso>(acesso, HttpStatus.OK);
+	}
+	
 }
+
+
+
+

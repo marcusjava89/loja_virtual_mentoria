@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "acesso")
 @SequenceGenerator(name = "seq_acesso", sequenceName = "seq_acesso", allocationSize = 1, initialValue = 1)
@@ -23,6 +25,9 @@ public class Acesso implements GrantedAuthority{
 	private String descricao; // ROLE_ADMIN ou ROLE_SECRETARIO
 
 	/*Método sempre é implementado quando se implementa GrantedAuthority. Mudar retorno.*/
+	/*Ele está pprocurando o método setAuthority que não existe e por isso o erro no teste. Para corrigir colocamos
+	 *@JsonIgnore. Ele aponta erro em authority no log.*/
+	@JsonIgnore
 	@Override
 	public String getAuthority() {
 		return this.descricao; 

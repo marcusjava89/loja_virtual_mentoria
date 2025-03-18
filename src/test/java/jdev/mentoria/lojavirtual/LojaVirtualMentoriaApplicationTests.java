@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,7 +38,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 	private WebApplicationContext wac;
 	
 	@Test
-	public void restApiCadastroAcesso() throws JsonProcessingException, Exception {
+	public void testRestApiCadastroAcesso() throws JsonProcessingException, Exception {
 		/*DefaultMockMvcBuilder é usada para configurar e construir uma instância de MockMvc.*/
 		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
 		/*MockMvc é uma ferramenta poderosa para testar controladores (controllers) em aplicações Spring MVC de forma
@@ -46,7 +47,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		
 		Acesso acesso = new Acesso();
 		
-		acesso.setDescricao("ROLE_COMPRADOR3");
+		acesso.setDescricao("ROLE_COMPRADOR4");
 		
 		/*Faz a serialização e a desserialização de uma string json para objetos, coleções, listas java e vice-
 		 * versa.*/
@@ -63,18 +64,65 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		/*andReturn Retorna o MvcResult, que contém detalhes completos sobre o resultado da requisição simulada.*/
 		System.out.println("Retorno da API" + retornoApi.andReturn().getResponse().getContentAsString());
 		
-		/*Desserializa a string json em objeto java, nesse caso objeto Acesso.*/
+		/*Desserializa a string json em objeto java, nesse caso objeto Acesso. O objeto de retorno não foi completo
+		 *antes de @JsonIgnore, porque ele procura setAuthoroty.*/
 		Acesso objetoRetorno = objectMapper.readValue(retornoApi.andReturn().getResponse().getContentAsString(),
 								Acesso.class);
-		
-		assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
-		
-		
-		
-		
-		
+		 
+		assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());	
 		
 	}
+	
+	@Test
+	public void testRestApiDeleteAcesso() throws JsonProcessingException, Exception {
+		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+		MockMvc mockMvc = builder.build();
+		
+		Acesso acesso = new Acesso();
+		
+		acessoRepository.save(acesso);
+		
+		acesso.setDescricao("ROLE_TESTE_DELETE");
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.post("/deleteAcesso")
+									.content(objectMapper.writeValueAsString(acesso))
+									.accept(MediaType.APPLICATION_JSON)
+									.contentType(MediaType.APPLICATION_JSON)); 
+		System.out.println("Retorno da API: " + retornoApi.andReturn().getResponse().getContentAsString());	
+		System.out.println("Retorno do status: "+retornoApi.andReturn().getResponse().getStatus());
+		
+		assertEquals("Acesso removido.", retornoApi.andReturn().getResponse().getContentAsString());
+		assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
+	}
+	
+	@Test
+	public void testRestApiDeletePorIDAcesso() throws JsonProcessingException, Exception {
+		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+		MockMvc mockMvc = builder.build();
+		
+		Acesso acesso = new Acesso();
+		
+		acessoRepository.save(acesso);
+		
+		acesso.setDescricao("ROLE_TESTE_DELETE_ID");
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		ResultActions retornoApi = mockMvc
+									.perform(MockMvcRequestBuilders.delete("/deleteAcessoPorId/"+acesso.getId())
+									.content(objectMapper.writeValueAsString(acesso))
+									.accept(MediaType.APPLICATION_JSON)
+									.contentType(MediaType.APPLICATION_JSON)); 
+		System.out.println("Retorno da API: " + retornoApi.andReturn().getResponse().getContentAsString());	
+		System.out.println("Retorno do status: "+retornoApi.andReturn().getResponse().getStatus());
+		
+		assertEquals("Acesso removido por id.", retornoApi.andReturn().getResponse().getContentAsString());
+		assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
+	}
+	
+	
 	
 	@Test
 	public void testarCadastro() {
