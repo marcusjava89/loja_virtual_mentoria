@@ -49,7 +49,7 @@ public class AcessoController {
 	@ResponseBody 
 	@DeleteMapping(value = "/deleteAcessoPorId/{id}") 
 	public ResponseEntity<?> deleteAcessoPorId(@PathVariable("id") Long id) {
-		/*Método que deleta pelo id*/
+		/*Método que deleta pelo id.*/
 		acessoRepository.deleteById(id);
 		
 		return new ResponseEntity("Acesso removido por id.", HttpStatus.OK);
@@ -58,13 +58,16 @@ public class AcessoController {
 	@ResponseBody 
 	@GetMapping(value = "/obterAcesso/{id}") 
 	public ResponseEntity<?> obterAcesso(@PathVariable("id") Long id) {
-		/*Método que deleta pelo id*/
+		/*Método que encontra acesso pelo id.*/
 		Acesso acesso = acessoRepository.findById(id).get();
 		
 		return new ResponseEntity<Acesso>(acesso, HttpStatus.OK);
 	}
 	
 }
+
+
+
 
 
 

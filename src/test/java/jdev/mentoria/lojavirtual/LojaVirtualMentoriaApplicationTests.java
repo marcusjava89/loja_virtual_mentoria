@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,13 +32,16 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 	@Autowired
 	private AcessoRepository acessoRepository;
 	
-	/*Objeto do Spring que pega as informações da aplicação que está rodando*/
+	/*Objeto do Spring que pega as informações da aplicação que está rodando. Necessário para contrução do objeto
+	 *MockMvc, objeto que trabalha com serialização.*/
 	@Autowired
 	private WebApplicationContext wac;
 	
 	@Test
 	public void testRestApiCadastroAcesso() throws JsonProcessingException, Exception {
 		/*DefaultMockMvcBuilder é usada para configurar e construir uma instância de MockMvc.*/
+		/*MockMvcRequestBuilders é uma classe utilitária que fornece métodos para criar requisições HTTP simuladas
+		 *(como post(), get(), put(), etc.).*/
 		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
 		/*MockMvc é uma ferramenta poderosa para testar controladores (controllers) em aplicações Spring MVC de forma
 		 *isolada, sem a necessidade de implantar a aplicação em um servidor real. */
@@ -47,14 +49,23 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		
 		Acesso acesso = new Acesso();
 		
-		acesso.setDescricao("ROLE_COMPRADOR4");
+		acesso.setDescricao("ROLE_COMPRADOR9");
 		
-		/*Faz a serialização e a desserialização de uma string json para objetos, coleções, listas java e vice-
-		 * versa.*/
+		/*ObjectMapper da biblioteca Jackson. Faz a serialização e a desserialização de uma string json para objetos,
+		 *coleções, listas java e vice-versa.*/
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		/*é usada para realizar ações e verificações (assertions) após simular uma requisição HTTP com o MockMvc*/
 		 /*objectMapper.writeValueAsString(acesso) serializa acesso em uma string json.*/
+		/*perform() é usado para simular uma requisição HTTP (GET, POST, PUT, DELETE, etc.). Não precisamos salvar o
+		 *acesso com acessoRespository.save(acesso), porque o perform salva.*/
+		/*O método .content() é usado para definir o corpo (body) da requisição HTTP.*/
+		/*objectMapper.writeValueAsString(acesso) converte um objeto Java (acesso) em uma string JSON.*/
+		/*.accept() define o tipo de mídia (media type) que o cliente (aqui, o teste) espera receber como resposta.*/
+		/*MediaType.APPLICATION_JSON indica que o cliente espera uma resposta no formato JSON.*/
+		/*perform() retorna um objeto do tipo ResultActions, que permite realizar verificações (assertions) na 
+		 *resposta da requisição.*/
+		/*retornoApi armazena o resultado da requisição.*/
 		ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.post("/salvarAcesso")
 									.content(objectMapper.writeValueAsString(acesso))
 									.accept(MediaType.APPLICATION_JSON)
@@ -80,9 +91,9 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		
 		Acesso acesso = new Acesso();
 		
-		acessoRepository.save(acesso);
-		
 		acesso.setDescricao("ROLE_TESTE_DELETE");
+
+		acessoRepository.save(acesso);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -104,9 +115,9 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		
 		Acesso acesso = new Acesso();
 		
-		acessoRepository.save(acesso);
-		
 		acesso.setDescricao("ROLE_TESTE_DELETE_ID");
+
+		acessoRepository.save(acesso);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -122,7 +133,33 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
 	}
 	
-	
+	@Test
+	public void testRestApiObterAcessoID() throws JsonProcessingException, Exception {
+		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+		MockMvc mockMvc = builder.build();
+		
+		Acesso acesso = new Acesso();
+		
+		acesso.setDescricao("ROLE_OBTER_ID");
+		
+		acessoRepository.save(acesso);
+				
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		ResultActions retornoApi = mockMvc
+									.perform(MockMvcRequestBuilders.get("/obterAcesso/"+acesso.getId())
+									.content(objectMapper.writeValueAsString(acesso))
+									.accept(MediaType.APPLICATION_JSON)
+									.contentType(MediaType.APPLICATION_JSON)); 
+		
+		assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
+		
+		Acesso acessoRetorno = objectMapper.readValue(retornoApi.andReturn().getResponse().getContentAsString(), 
+				Acesso.class);
+		
+		assertEquals(acesso.getId(), acessoRetorno.getId());
+		
+	}
 	
 	@Test
 	public void testarCadastro() {
@@ -137,7 +174,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		/*Validar dados da forma correta.*/
 		assertEquals("Role_Admin", acesso.getDescricao());
 		
-		/*Teste de carregamento*/
+		/*Teste de carregamento. */
 		
 		Acesso acesso2 = acessoRepository.findById(acesso.getId()).get();
 		assertEquals(acesso.getId(), acesso2.getId());
