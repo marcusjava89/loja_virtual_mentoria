@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jdev.mentoria.lojavirtual.controller.AcessoController;
@@ -45,11 +46,14 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
 		/*MockMvc é uma ferramenta poderosa para testar controladores (controllers) em aplicações Spring MVC de forma
 		 *isolada, sem a necessidade de implantar a aplicação em um servidor real. */
+		/*Um mock é uma simulação de um objeto ou componente que substitui uma dependência real durante os testes. 
+		 *Ele é usado para isolar a unidade de código que está sendo testada, garantindo que o teste se concentre 
+		 *apenas no comportamento daquela unidade, sem depender de outros componentes externos.*/
 		MockMvc mockMvc = builder.build();
 		
 		Acesso acesso = new Acesso();
 		
-		acesso.setDescricao("ROLE_COMPRADOR9");
+		acesso.setDescricao("ROLE_COMPRADOR10");
 		
 		/*ObjectMapper da biblioteca Jackson. Faz a serialização e a desserialização de uma string json para objetos,
 		 *coleções, listas java e vice-versa.*/
@@ -147,7 +151,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		ResultActions retornoApi = mockMvc
-									.perform(MockMvcRequestBuilders.get("/obterAcesso/"+acesso.getId())
+									.perform(MockMvcRequestBuilders.get("/obterAcesso/" + acesso.getId())
 									.content(objectMapper.writeValueAsString(acesso))
 									.accept(MediaType.APPLICATION_JSON)
 									.contentType(MediaType.APPLICATION_JSON)); 
@@ -158,6 +162,40 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 				Acesso.class);
 		
 		assertEquals(acesso.getId(), acessoRetorno.getId());
+		
+	}
+	
+	@Test
+	public void testRestApiObterAcessoDesc() throws JsonProcessingException, Exception {
+		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+		MockMvc mockMvc = builder.build();
+		
+		Acesso acesso = new Acesso();
+		
+		acesso.setDescricao("ROLE_TESTE_OBTER_LIST");
+		
+		acessoRepository.save(acesso);
+				
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		ResultActions retornoApi = mockMvc
+									.perform(MockMvcRequestBuilders.get("/buscarPorDesc/OBTER_LIST")
+									.content(objectMapper.writeValueAsString(acesso))
+									.accept(MediaType.APPLICATION_JSON)
+									.contentType(MediaType.APPLICATION_JSON)); 
+		
+		assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
+		
+		/*Para converter numa Lista, pois pode ter vários objetos.*/
+		List<Acesso> retornoApiList = objectMapper
+												.readValue(retornoApi.andReturn()
+												.getResponse()
+												.getContentAsString(), new TypeReference<List<Acesso>>() {});
+		
+		assertEquals(1, retornoApiList.size());
+		assertEquals(acesso.getDescricao(), retornoApiList.get(0).getDescricao());
+		
+		acessoRepository.deleteById(acesso.getId());
 		
 	}
 	

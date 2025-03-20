@@ -1,5 +1,8 @@
 package jdev.mentoria.lojavirtual.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +65,13 @@ public class AcessoController {
 		Acesso acesso = acessoRepository.findById(id).get();
 		
 		return new ResponseEntity<Acesso>(acesso, HttpStatus.OK);
+	}
+	
+	@ResponseBody 
+	@GetMapping(value = "/buscarPorDesc/{desc}") 
+	public ResponseEntity<?> buscarPorDesc(@PathVariable("desc") String desc) {
+		List<Acesso> acesso = acessoRepository.buscarAcessoDesc(desc);
+ 		return new ResponseEntity<List<Acesso>>(acesso, HttpStatus.OK);
 	}
 	
 }
