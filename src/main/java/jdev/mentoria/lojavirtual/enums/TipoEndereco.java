@@ -18,7 +18,7 @@ public enum TipoEndereco {
 		return descricao;
 	}
 
-	/*Mudamos o retorno para this.descricao*/
+	/*Mudamos o retorno para this.descricao.*/
 	@Override
 	public String toString() {
 		return this.descricao;

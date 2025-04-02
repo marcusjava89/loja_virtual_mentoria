@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator; 
 
 @Entity
-/*Usando essa estratégia não iremos usar a anotação @PrimaryKeyColumn nas classes filhas para não dar erro.*/
 /*A anotação é feita, pois Pessoa é uma super CLasse.*/
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 /*As classes filhas herdam o @SequenceGenerator, não precisando colocar nelas.*/
@@ -46,13 +45,24 @@ public abstract class Pessoa  implements Serializable{
 	@Column(nullable = false)
 	private String telefone;
 	
+	@Column
+	private String tipoPessoa;
+	
 	/*Pessoa pode ter uma lista de endereços, seja pessoa física ou jurídica.*/
 	/*Atributos que apontam para outra tabela recebem uma anotação.*/
 	/*Atributo endereco não está no diagrama de classes e foi posto depois. Não obrigatório colocar esse atributo.*/
+	/*Os parâmetros são úteis quando precisa controlar aspectos específicos do relacionamento.*/
 	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	/*apontando para a chave estrangeira pessoa em Endereco*/
 	private List<Endereco> enderecos = new ArrayList<>();
 	
+	public void setTipoPessoa(String tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
+	}
+	
+	public String getTipoPessoa() {
+		return tipoPessoa;
+	}
 	
 	public List<Endereco> getEnderecos() {
 		return enderecos;

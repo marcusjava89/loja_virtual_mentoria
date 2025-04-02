@@ -1,3 +1,0 @@
-select constraint_name from information_schema.constraint_column_usage where table_name='nota_fisca_venda' 
-and column_name = 'venda_compra_loja_virtual_id' and constraint_name <> 'venda_compra_loja_virtual_id';
-alter table nota_fisca_venda drop CONSTRAINT "uk4pew7jktivuw17yvjamnvnqct"

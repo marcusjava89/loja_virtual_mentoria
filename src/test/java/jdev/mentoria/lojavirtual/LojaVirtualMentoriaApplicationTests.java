@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,6 +23,7 @@ import jdev.mentoria.lojavirtual.model.Acesso;
 import jdev.mentoria.lojavirtual.repository.AcessoRepository;
 import junit.framework.TestCase;
 
+@Profile("test")
 /*Baixamos o JUnit 3 para poder estender a classe TestCase.*/
 @SpringBootTest(classes = LojaVirtualMentoriaApplication.class) /*Dizer a classe que estamos testando*/
 public class LojaVirtualMentoriaApplicationTests extends TestCase{
@@ -33,21 +35,21 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 	@Autowired
 	private AcessoRepository acessoRepository;
 	
-	/*Objeto do Spring que pega as informações da aplicação que está rodando. Necessário para contrução do objeto
+	/*Objeto do Spring que pega as informações da aplicação que está rodando. Necessário para cons4trução do objeto
 	 *MockMvc, objeto que trabalha com serialização.*/
 	@Autowired
 	private WebApplicationContext wac;
 	
-	@Test
+	@Test /*Anotação para rodar teste.*/
 	public void testRestApiCadastroAcesso() throws JsonProcessingException, Exception {
 		/*DefaultMockMvcBuilder é usada para configurar e construir uma instância de MockMvc.*/
 		/*MockMvcRequestBuilders é uma classe utilitária que fornece métodos para criar requisições HTTP simuladas
 		 *(como post(), get(), put(), etc.).*/
 		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
-		/*MockMvc é uma ferramenta poderosa para testar controladores (controllers) em aplicações Spring MVC de forma
-		 *isolada, sem a necessidade de implantar a aplicação em um servidor real. */
+		/*MockMvc é uma ferramenta para testar controladores (controllers) em aplicações Spring MVC de forma
+		 *isolada, sem a necessidade de implantar a aplicação em um servidor real.*/
 		/*Um mock é uma simulação de um objeto ou componente que substitui uma dependência real durante os testes. 
-		 *Ele é usado para isolar a unidade de código que está sendo testada, garantindo que o teste se concentre 
+		 *Ele é usado para isolar a unidade de código que está sendo testada, garantindo que o teste se concentre
 		 *apenas no comportamento daquela unidade, sem depender de outros componentes externos.*/
 		MockMvc mockMvc = builder.build();
 		
@@ -59,12 +61,11 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		 *coleções, listas java e vice-versa.*/
 		ObjectMapper objectMapper = new ObjectMapper();
 		
-		/*é usada para realizar ações e verificações (assertions) após simular uma requisição HTTP com o MockMvc*/
+		/*É usada para realizar ações e verificações (assertions) após simular uma requisição HTTP com o MockMvc*/
 		 /*objectMapper.writeValueAsString(acesso) serializa acesso em uma string json.*/
 		/*perform() é usado para simular uma requisição HTTP (GET, POST, PUT, DELETE, etc.). Não precisamos salvar o
 		 *acesso com acessoRespository.save(acesso), porque o perform salva.*/
 		/*O método .content() é usado para definir o corpo (body) da requisição HTTP.*/
-		/*objectMapper.writeValueAsString(acesso) converte um objeto Java (acesso) em uma string JSON.*/
 		/*.accept() define o tipo de mídia (media type) que o cliente (aqui, o teste) espera receber como resposta.*/
 		/*MediaType.APPLICATION_JSON indica que o cliente espera uma resposta no formato JSON.*/
 		/*perform() retorna um objeto do tipo ResultActions, que permite realizar verificações (assertions) na 
@@ -73,14 +74,14 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.post("/salvarAcesso")
 									.content(objectMapper.writeValueAsString(acesso))
 									.accept(MediaType.APPLICATION_JSON)
-									.contentType(MediaType.APPLICATION_JSON)); 
-		/*Ele é retornado pelo método perform() do MockMvc*/
+									.contentType(MediaType.APPLICATION_JSON));
 		
+		/*Ele é retornado pelo método perform() do MockMvc.*/
 		/*andReturn Retorna o MvcResult, que contém detalhes completos sobre o resultado da requisição simulada.*/
-		System.out.println("Retorno da API" + retornoApi.andReturn().getResponse().getContentAsString());
+		System.out.println("Retorno da API " + retornoApi.andReturn().getResponse().getContentAsString());
 		
 		/*Desserializa a string json em objeto java, nesse caso objeto Acesso. O objeto de retorno não foi completo
-		 *antes de @JsonIgnore, porque ele procura setAuthoroty.*/
+		 *antes de @JsonIgnore, porque ele procura getAuthority, que não foi settado.*/
 		Acesso objetoRetorno = objectMapper.readValue(retornoApi.andReturn().getResponse().getContentAsString(),
 								Acesso.class);
 		 
@@ -171,13 +172,12 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		MockMvc mockMvc = builder.build();
 		
 		Acesso acesso = new Acesso();
-		
 		acesso.setDescricao("ROLE_TESTE_OBTER_LIST");
-		
 		acessoRepository.save(acesso);
 				
 		ObjectMapper objectMapper = new ObjectMapper();
 		
+		/*O retorno será uma lista que não é um objeto List porque foi serializado.*/
 		ResultActions retornoApi = mockMvc
 									.perform(MockMvcRequestBuilders.get("/buscarPorDesc/OBTER_LIST")
 									.content(objectMapper.writeValueAsString(acesso))
@@ -186,11 +186,12 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		
 		assertEquals(200, retornoApi.andReturn().getResponse().getStatus());
 		
-		/*Para converter numa Lista, pois pode ter vários objetos.*/
+		/*Para converter numa Lista, desserializar, pois pode ter vários objetos.*/
 		List<Acesso> retornoApiList = objectMapper
 												.readValue(retornoApi.andReturn()
 												.getResponse()
 												.getContentAsString(), new TypeReference<List<Acesso>>() {});
+		/*TypeReference da biblioteca Jackson. new porque estamos criando o objetolist que não existe*/
 		
 		assertEquals(1, retornoApiList.size());
 		assertEquals(acesso.getDescricao(), retornoApiList.get(0).getDescricao());
@@ -206,7 +207,8 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase{
 		acesso.setDescricao("Role_Admin");
 		
 		assertEquals(true, acesso.getId() == null);
-		/*Gravou no banco de Dados. O getBody() é usado para extrair o conteúdo (corpo) da resposta (ResponseEntity)*/
+		/*Gravou no banco de Dados. O getBody() é usado para extrair o conteúdo (corpo) da 
+		 *resposta (ResponseEntity).*/
 		acesso = acessoController.salvarAcesso(acesso).getBody();
 		assertEquals(true, acesso.getId() > 0);
 		/*Validar dados da forma correta.*/

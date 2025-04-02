@@ -39,9 +39,7 @@ public class NotaItemProduto implements Serializable{
 	foreignKey = @ForeignKey(name = "nota_fiscal_compra_fk", value = ConstraintMode.CONSTRAINT))
 	private NotaFiscalCompra notaFiscalCompra;
 	
-	/*Na outra ponta em NotaFiscalCompra poderiamos ter 
-	 *@OneToMany
-	 *private List<NotaItemProduto> etc.
+	/*Na outra ponta em NotaFiscalCompra poderiamos ter @OneToMany private List<NotaItemProduto> etc.
 	 *Não teremos, pois pode gerar lentidão de carregamento, quando precisarmos faremos consulta ao banco de dados.
 	 *Mas fizemos em Pessoa e Endereco.*/
 

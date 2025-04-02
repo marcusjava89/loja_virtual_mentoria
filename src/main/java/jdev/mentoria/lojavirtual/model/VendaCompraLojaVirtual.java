@@ -31,15 +31,12 @@ public class VendaCompraLojaVirtual implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vd_cp_loja_virt")
 	private Long id;
 	
-	/*A cada associação feita rodar o projeto para achar onde está o erro, caso tenha.*/
 	/*Como Pessoa é uma classe abstrata a gente coloca a entidade alvo.*/
 	@ManyToOne(targetEntity = Pessoa.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, 
 	foreignKey = @ForeignKey(name = "pessoa_fk", value = ConstraintMode.CONSTRAINT))
 	private Pessoa pessoa;
 	
-	/*Não precisa colocar a classe alvo porque Endereco não é uma classe abstrata.*/
-	/*O nome da join column é o nome do atributo e não da classe.*/
 	@ManyToOne
 	@JoinColumn(name = "endereco_entrega_id", nullable = false, 
 	foreignKey = @ForeignKey(name = "endereco_entrega_fk", value = ConstraintMode.CONSTRAINT))
@@ -65,7 +62,6 @@ public class VendaCompraLojaVirtual implements Serializable{
 	foreignKey = @ForeignKey(name = "nota_fiscal_venda_fk", value = ConstraintMode.CONSTRAINT))
 	private NotafiscalVenda notafiscalVenda; 
 	/*fazer a associação na nota fiscal venda para saber de qual venda vem a nota.*/
-	
 	
 	@ManyToOne
 	@JoinColumn(name = "cupom_desc_id", /*Pode não ter um cupom de desconto.*/ 

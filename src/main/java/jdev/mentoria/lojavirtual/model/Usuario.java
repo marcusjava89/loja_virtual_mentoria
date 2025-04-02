@@ -52,10 +52,9 @@ public class Usuario implements UserDetails{
 	foreignKey =  @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
 	
-	/*Sem essa anotação temos erro de execução. O mesmo acontece em Pessoa com lista de endereços. Listas de objetos 
-	 *de outras classes são chaves estrangeiras.*/
 	@OneToMany(fetch = FetchType.LAZY)
-	/*Aqui criamos no banco de dados usuario_acesso*/
+	/*Aqui criamos no banco de dados usuario_acesso. Aqui temos um @JoinTable e não @JoinColumn*/
+	/*Aqui é classe dona e Acesso classe inversa.\dxs*/
 	@JoinTable(name = "usuario_acesso", uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id","acesso_id"},
 	name = "unique_acesso_user"), 
 	joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id", table = "usuario", unique = false,
@@ -73,8 +72,8 @@ public class Usuario implements UserDetails{
 	
 	/*É necessário ter o unique false para termos mais de um tipo de acesso, referência.*/
 	
-	/*Tudo dentro de @JoinTable está relacionada à tabela usuario_acesso, que gera uma CONSTRAINT que não deveria, por
-	 *isso será removida na manuntenção do banco de dados.*/
+	/*Tudo dentro de @JoinTable está relacionada à tabela usuario_acesso, que gera uma CONSTRAINT que não deveria,
+	 *por isso será removida na manuntenção do banco de dados.*/
 	
 	/*Em inverseJoinColumns dizemos que unique tinha que ser false e mesmo assim foi criado um constraint no banco de
 	 *dados em usuario_acessos, que vai ser eliminado na manuntenção do banco./

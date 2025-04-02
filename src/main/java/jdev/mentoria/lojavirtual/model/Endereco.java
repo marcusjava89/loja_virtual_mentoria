@@ -49,16 +49,14 @@ public class Endereco  implements Serializable{
 	@Column (nullable = false)
 	private String cidade;
 	
-	/*Define a relação de muitos para um no banco de dados, muitos endereços podem ser de uma pessoa. Também deixar 
-	 *claro a entidade alvo que é Pessoa.*/
-	/*Essa anotação deve ser feita porque temos relacionamento entre Endereço e Pessoa.*/
-	/*na anotação ManyToOne coloca-se a entidade alvo.*/
+	/*Na anotação ManyToOne colocar a entidade alvo é opcional. Se o tipo do atributo já for uma classe de entidade
+	 *(por exemplo, Pessoa), o JPA consegue deduzir automaticamente a entidade alvo. Se o atributo for declarado como
+	 *uma interface ou classe abstrata, o JPA não consegue inferir a entidade correta. Nesse caso, você precisa usar
+	 *targetEntity para especificar a classe concreta.*/
 	@ManyToOne(targetEntity = Pessoa.class)
-	/*Anotação @JoinColumn. Para chave estrangeira.*/
 	@JoinColumn(name = "pessoa_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
-	/*pessoa, atributo relacionado a outra tabela, então é uma chave estrangeira e pela anotação destaca-se isso.*/
 
 	@Column (nullable = false)
 	@Enumerated(EnumType.STRING)
